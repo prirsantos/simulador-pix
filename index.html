@@ -1,87 +1,282 @@
-<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de PIX - Escola</title>
-    <!-- Tailwind CSS for modern styling -->
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
+    <!-- Ícones Lucide para navegação visual clara -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-100 font-sans flex justify-center items-start min-h-screen sm:items-center">
 
-    <!-- Mobile Screen Frame -->
+    <!-- Moldura de Celular (Responsiva para visualização em computadores ou mobile) -->
     <div class="w-full max-w-md bg-white min-h-screen sm:min-h-[850px] sm:rounded-3xl sm:shadow-2xl flex flex-col justify-between overflow-hidden border border-slate-200">
         
-        <!-- Header: Deep Blue (Haiti/Brazil) with Yellow (Brazil) Badge -->
-        <header class="bg-[#002060] text-white p-6 shadow-md border-b-4 border-[#009b3a]">
+        <!-- Cabeçalho (Fixo no topo): Cores restauradas conforme solicitado -->
+        <header class="bg-[#002060] text-white p-6 shadow-md border-b-4 border-[#009b3a] shrink-0">
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-xs uppercase tracking-wider text-slate-300 font-bold">Simulador Escolar</p>
                     <h1 class="text-2xl font-black tracking-tight">NOSSO BANCO</h1>
                 </div>
-                <!-- Yellow Badge with Red Border (Haiti/Brazil integration) -->
+                <!-- Alerta visual de Modo Treino -->
                 <span class="bg-[#fedf00] text-[#002060] text-xs font-black px-3 py-1.5 rounded-full border border-red-600 shadow">
                     MODO TREINO
                 </span>
             </div>
+            
+            <!-- Barra de Progresso / Indicador de Passos -->
+            <div class="mt-4 bg-[#001540] rounded-full h-3 overflow-hidden border border-slate-700">
+                <div id="barra-progresso" class="bg-[#fedf00] h-full transition-all duration-300" style="width: 14%;"></div>
+            </div>
+            <p id="texto-passo" class="text-xs text-slate-300 font-bold mt-1.5 uppercase tracking-wider">Passo 1 de 7: Início</p>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6 flex flex-col justify-between gap-6">
+        <!-- Conteúdo Principal Dinâmico -->
+        <main class="flex-1 p-6 flex flex-col justify-between gap-6 overflow-y-auto">
 
-            <!-- TELA 1: DASHBOARD (TELA INICIAL) -->
-            <div id="tela-inicial" class="flex flex-col gap-8 h-full justify-between flex-1">
+            <!-- ================= TELA 1: DASHBOARD ================= -->
+            <div id="tela-inicial" class="tela-app flex flex-col gap-6 justify-between flex-1">
                 
-                <!-- Balance Box: Dark Blue border, Green details for money -->
-                <div class="bg-slate-50 p-6 rounded-2xl border-2 border-[#002060] shadow-sm">
+                <!-- Caixa de Saldo Seguro -->
+                <div class="bg-slate-50 p-5 rounded-2xl border-2 border-[#002060] shadow-sm">
                     <div class="flex items-center gap-2 text-[#002060] mb-1">
                         <i data-lucide="wallet" class="w-5 h-5 text-[#009b3a]"></i>
                         <span class="text-sm font-bold uppercase tracking-wide">Seu Dinheiro na Conta:</span>
                     </div>
-                    <!-- Big, highly readable balance -->
                     <p class="text-4xl font-black text-slate-900">R$ 1.800,00</p>
                     <p class="text-xs text-[#009b3a] mt-2 font-bold uppercase tracking-wider">Este dinheiro é para treinar!</p>
                 </div>
 
-                <!-- Main PIX Button: Deep Blue with Yellow Highlight -->
+                <!-- Botões de Ação Principais -->
                 <div class="flex flex-col gap-4">
                     <p class="text-lg font-bold text-slate-700">O que você quer fazer hoje?</p>
                     
-                    <button onclick="irParaTela('tela-escolha-chave')" 
-                            class="w-full bg-[#002060] hover:bg-[#001540] active:bg-black text-white rounded-2xl p-6 flex items-center justify-between shadow-lg transition-all border-b-4 border-red-600 active:border-b-0">
+                    <!-- Botão PIX principal -->
+                    <button onclick="irParaTela('tela-escolha-opcao')" 
+                            class="w-full bg-[#002060] hover:bg-[#001540] active:bg-black text-white rounded-2xl p-5 flex items-center justify-between shadow-md transition-all border-b-4 border-red-600 active:border-b-0">
                         <div class="flex items-center gap-4">
-                            <!-- Green background icon wrapper -->
-                            <div class="bg-[#009b3a] p-3 rounded-xl">
-                                <i data-lucide="send" class="w-8 h-8 text-[#fedf00]"></i>
+                            <div class="bg-[#009b3a] p-3 rounded-xl shadow-inner flex items-center justify-center">
+                                <svg class="w-8 h-8" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M112.57 391.19c20.056 0 38.928-7.808 53.12-22l76.693-76.692c5.385-5.404 14.765-5.384 20.15 0l76.989 76.989c14.191 14.172 33.045 21.98 53.12 21.98h15.098l-97.138 97.139c-30.326 30.344-79.505 30.344-109.831 0l-97.139-97.139h10.938zm287.031-270.38c-20.075 0-38.929 7.808-53.12 21.98l-76.989 76.99c-5.385 5.384-14.765 5.384-20.15 0L172.65 142.79c-14.192-14.172-33.064-21.98-53.12-21.98H108.59l97.139-97.139c30.326-30.344 79.505-30.344 109.831 0l97.138 97.139h-13.097zM120.79 164.77l76.784 76.786c14.209 14.207 33.095 22.019 53.179 22.019 20.082 0 38.969-7.812 53.176-22.02l77.069-77.067c5.375-5.375 14.773-5.395 20.17 0l21.432 21.43c30.375 30.375 30.375 79.614 0 109.989l-21.432 21.43c-5.397 5.395-14.795 5.375-20.17 0l-77.069-77.067c-14.207-14.208-33.094-22.02-53.176-22.02-20.084 0-38.97 7.812-53.179 22.02l-76.784 76.786c-5.397 5.395-14.795 5.375-20.17 0l-21.43-21.43c-30.375-30.375-30.375-79.614 0-109.989l21.43-21.43c5.375-5.375 14.773-5.395 20.17 0z" fill="#ffffff"/>
+                                </svg>
                             </div>
                             <div class="text-left">
-                                <span class="block text-2xl font-black text-white">Enviar PIX</span>
-                                <span class="block text-sm text-[#fedf00] font-semibold">Pagar alguém</span>
+                                <span class="block text-xl font-black text-white">Enviar PIX</span>
+                                <span class="block text-xs text-[#fedf00] font-bold">Transferir dinheiro na hora</span>
                             </div>
                         </div>
-                        <i data-lucide="chevron-right" class="w-8 h-8 text-white"></i>
+                        <i data-lucide="chevron-right" class="w-7 h-7 text-white"></i>
+                    </button>
+
+                    <!-- Pagar Boleto (Faixinha cinza alterada para vermelho vibrante) -->
+                    <button onclick="opcaoEmDesenvolvimento('Pagar Conta')" 
+                            class="w-full bg-[#002060] hover:bg-[#001540] active:bg-black text-white rounded-2xl p-5 flex items-center justify-between shadow-md transition-all border-b-4 border-red-600 active:border-b-0">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-[#fedf00] p-3 rounded-xl shadow-inner flex items-center justify-center">
+                                <i data-lucide="barcode" class="w-8 h-8 text-[#002060]"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="block text-xl font-black text-white">Pagar Conta</span>
+                                <span class="block text-xs text-slate-300 font-bold">Usar código de barras</span>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-7 h-7 text-white"></i>
+                    </button>
+
+                    <!-- Recarga (Faixinha cinza alterada para vermelho vibrante) -->
+                    <button onclick="opcaoEmDesenvolvimento('Recarga de Celular')" 
+                            class="w-full bg-[#002060] hover:bg-[#001540] active:bg-black text-white rounded-2xl p-5 flex items-center justify-between shadow-md transition-all border-b-4 border-red-600 active:border-b-0">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-[#009b3a] p-3 rounded-xl shadow-inner flex items-center justify-center">
+                                <i data-lucide="smartphone" class="w-8 h-8 text-[#fedf00]"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="block text-xl font-black text-white">Recarga de Celular</span>
+                                <span class="block text-xs text-slate-300 font-bold">Colocar créditos no telefone</span>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-7 h-7 text-white"></i>
                     </button>
                 </div>
 
-                <!-- Tutorial Card: Uses Haiti/Brazil soft colors -->
-                <div class="bg-amber-50 border-l-4 border-[#fedf00] p-4 rounded-r-xl shadow-sm">
-                    <div class="flex gap-2">
-                        <i data-lucide="info" class="w-6 h-6 text-[#002060] flex-shrink-0"></i>
+                <!-- Dica pedagógica da tela -->
+                <div class="bg-amber-50 border-l-4 border-[#fedf00] p-4 rounded-r-xl shadow-sm mt-2">
+                    <div class="flex gap-2.5">
+                        <i data-lucide="info" class="w-6 h-6 text-[#002060] shrink-0 mt-0.5"></i>
                         <div>
                             <p class="font-black text-[#002060] text-base">Dica para começar:</p>
-                            <p class="text-sm text-slate-800 mt-1">Toque no botão grande azul <strong>"Enviar PIX"</strong> acima para começar o treino.</p>
+                            <p class="text-sm text-slate-800 mt-1">Toque no botão azul <strong>"Enviar PIX"</strong> acima para começar o seu treino.</p>
                         </div>
                     </div>
                 </div>
 
             </div>
 
+            <!-- ================= TELA 2: ESCOLHA DA OPÇÃO ================= -->
+            <div id="tela-escolha-opcao" class="tela-app hidden flex flex-col gap-5 justify-between flex-1">
+                
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-none">Como deseja fazer o Pix?</h2>
+                    <p class="text-sm text-slate-600 font-medium">Você pode digitar uma chave ou fazer a leitura de um código QR.</p>
+                </div>
+
+                <!-- Duas opções simples solicitadas -->
+                <div class="flex flex-col gap-4">
+                    
+                    <!-- Opção 1: Digitar a chave -->
+                    <button onclick="selecionarOpcao('digitar')" 
+                            class="w-full bg-slate-50 hover:bg-slate-100 border-2 border-[#002060] text-left p-5 rounded-2xl flex items-center gap-4 transition-all shadow-sm">
+                        <div class="bg-blue-100 p-3 rounded-xl text-[#002060]">
+                            <i data-lucide="keyboard" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xl font-black text-slate-900 leading-none">Pix digitando a chave</span>
+                            <span class="block text-xs text-slate-500 mt-1.5">Usar número de CPF, CNPJ ou telefone</span>
+                        </div>
+                    </button>
+
+                    <!-- Opção 2: QR Code (Sem qualquer opacidade para contraste perfeito) -->
+                    <button onclick="selecionarOpcao('qrcode')" 
+                            class="w-full bg-slate-50 hover:bg-slate-100 border-2 border-[#002060] text-left p-5 rounded-2xl flex items-center gap-4 transition-all shadow-sm">
+                        <div class="bg-blue-100 p-3 rounded-xl text-[#002060]">
+                            <i data-lucide="qr-code" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xl font-black text-slate-900 leading-none">Pix por leitura de QR Code</span>
+                            <span class="block text-xs text-slate-500 mt-1.5">Ler código usando a câmera do celular</span>
+                        </div>
+                    </button>
+
+                </div>
+
+                <!-- Botões de navegação no final -->
+                <div class="flex flex-col gap-4 mt-auto">
+                    <div class="bg-amber-50 border-l-4 border-[#fedf00] p-3 rounded-r-xl shadow-sm">
+                        <p class="text-xs text-slate-800 font-bold">Conselho de Segurança: Se não souber qual chave usar, peça para quem vai receber o Pix lhe dizer.</p>
+                    </div>
+                    
+                    <button onclick="irParaTela('tela-inicial')" 
+                            class="w-full border-2 border-[#002060] text-[#002060] font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 active:bg-slate-200">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        Voltar para a Tela Inicial
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- ================= TELA 3: INSERÇÃO DA CHAVE (DIGITAR) ================= -->
+            <div id="tela-inserir-chave" class="tela-app hidden flex flex-col gap-5 justify-between flex-1">
+                
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-none">Digite a Chave Pix</h2>
+                    <p class="text-sm text-slate-600 font-medium">Escreva o CPF, CNPJ ou telefone da pessoa que vai receber.</p>
+                </div>
+
+                <!-- Campo de Entrada Livre (Sem máscaras automáticas durante a escrita) -->
+                <div class="flex flex-col gap-2">
+                    <label for="input-chave" class="text-xs font-black uppercase text-[#002060] tracking-wider">Chave Pix:</label>
+                    <input type="text" id="input-chave" 
+                           class="w-full border-4 border-[#002060] rounded-2xl p-4 text-xl font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-yellow-300"
+                           placeholder="Ex: CPF, CNPJ ou Telefone">
+                    
+                    <!-- Mensagem de Erro/Aviso Pedagógico amigável -->
+                    <div id="feedback-erro" class="hidden bg-red-50 border-l-4 border-red-600 p-4 rounded-r-xl mt-2">
+                        <p class="text-red-700 font-black text-sm flex items-center gap-1.5">
+                            <i data-lucide="alert-circle" class="w-4.5 h-4.5 shrink-0"></i>
+                            O número digitado não é válido!
+                        </p>
+                        <p id="feedback-erro-detalhes" class="text-xs text-red-600 mt-1 font-medium leading-normal">
+                            O formato do CPF, CNPJ ou telefone parece incorreto. Verifique os números e digite novamente com atenção.
+                        </p>
+                    </div>
+
+                    <!-- Mensagem de Sucesso (Validação positiva antes de ir ao passo 4) -->
+                    <div id="feedback-sucesso" class="hidden bg-green-50 border-l-4 border-[#009b3a] p-4 rounded-r-xl mt-2">
+                        <p class="text-green-800 font-black text-sm flex items-center gap-1.5">
+                            <i data-lucide="check-circle-2" class="w-4.5 h-4.5 shrink-0"></i>
+                            Chave identificada com sucesso!
+                        </p>
+                        <p class="text-xs text-green-700 mt-1 font-medium">
+                            Chave reconhecida e formatada como: <strong id="chave-formatada-exibida" class="text-sm font-extrabold block mt-0.5"></strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Dica pedagógica de segurança de dados -->
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-xl">
+                    <p class="font-bold text-[#002060] text-sm">Dica de segurança:</p>
+                    <p class="text-xs text-slate-700 mt-1">Um único número errado ou fora do lugar fará o Pix ser enviado para outra pessoa ou não funcionar.</p>
+                </div>
+
+                <!-- Botões de Ação da Tela de Inserção -->
+                <div class="flex flex-col gap-3 mt-auto">
+                    <button onclick="validarEAvancar()" 
+                            class="w-full bg-[#009b3a] hover:bg-[#007b2e] text-white font-black py-4 rounded-xl text-lg shadow-md flex items-center justify-center gap-2">
+                        Continuar
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                    
+                    <button onclick="irParaTela('tela-escolha-opcao')" 
+                            class="w-full text-slate-600 font-bold py-2 hover:text-slate-900 flex items-center justify-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        Voltar para a escolha
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- ================= TELA MOCK: LEITURA DE QR CODE ================= -->
+            <div id="tela-qrcode" class="tela-app hidden flex flex-col gap-5 justify-between flex-1">
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight">Leitura de QR Code</h2>
+                    <p class="text-sm text-slate-600">Simulação de uso de câmera para ler o código QR do Pix.</p>
+                </div>
+
+                <!-- Visualização simulada da Câmera -->
+                <div class="border-4 border-[#002060] rounded-2xl h-64 bg-black flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fedf00_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <i data-lucide="scan" class="w-24 h-24 text-[#fedf00] animate-pulse"></i>
+                    <p class="text-xs text-white uppercase tracking-wider font-bold mt-4">Procurando código QR...</p>
+                </div>
+
+                <!-- Notificação de Simulação do QR Code -->
+                <div class="bg-amber-50 border-l-4 border-[#fedf00] p-4 rounded-r-xl">
+                    <p class="font-bold text-[#002060] text-sm">Aviso de Simulador:</p>
+                    <p class="text-xs text-slate-700 mt-1">Neste ambiente de treino, a câmera de verdade não será aberta para segurança dos dados dos seus alunos.</p>
+                </div>
+
+                <div class="flex flex-col gap-3 mt-auto">
+                    <button onclick="irParaTela('tela-escolha-opcao')" 
+                            class="w-full border-2 border-[#002060] text-[#002060] font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        Voltar para as Opções
+                    </button>
+                </div>
+            </div>
+
+            <!-- Container temporário para mensagens informativas (Sem alerts nativos) -->
+            <div id="mensagem-alerta-app" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-6 z-50">
+                <div class="bg-white rounded-3xl p-6 border-4 border-[#002060] w-full max-w-xs flex flex-col gap-4 text-center">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                        <i data-lucide="info" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-[#002060] text-lg uppercase">Aviso</h3>
+                        <p id="texto-alerta-app" class="text-sm text-slate-700 mt-2 font-medium leading-normal"></p>
+                    </div>
+                    <button onclick="fecharAlertaApp()" class="bg-[#002060] text-white font-bold py-2 px-4 rounded-xl w-full">
+                        Entendi
+                    </button>
+                </div>
+            </div>
+
         </main>
 
-        <!-- Footer: Safety Warning with Red Text (Haiti Red) -->
-        <footer class="bg-slate-100 p-4 text-center border-t border-slate-200">
+        <!-- Rodapé Estático de Aviso e Confiança -->
+        <footer class="bg-slate-100 p-4 text-center border-t border-slate-200 shrink-0">
             <p class="text-xs font-black text-red-600 uppercase tracking-wider flex items-center justify-center gap-1">
                 <i data-lucide="shield-alert" class="w-4 h-4"></i>
                 Ambiente de Teste Seguro • Sem Dinheiro Real
@@ -89,12 +284,237 @@
         </footer>
     </div>
 
-    <!-- Script -->
     <script>
+        // Inicializar os ícones do Lucide
         lucide.createIcons();
 
+        // Controlar estado das telas
         function irParaTela(idTela) {
-            alert("Muito bem! Você clicou para avançar. No próximo passo vamos programar a tela de escolha de chaves!");
+            document.querySelectorAll('.tela-app').forEach(tela => {
+                tela.classList.add('hidden');
+            });
+            document.getElementById(idTela).classList.remove('hidden');
+            
+            // Ocultar avisos da tela anterior ao mudar de tela
+            document.getElementById('feedback-erro').classList.add('hidden');
+            document.getElementById('feedback-sucesso').classList.add('hidden');
+            
+            atualizarProgresso(idTela);
+        }
+
+        // Atualizador Pedagógico do Topo (Barra de Progresso)
+        function atualizarProgresso(idTela) {
+            const barra = document.getElementById('barra-progresso');
+            const texto = document.getElementById('texto-passo');
+
+            if (idTela === 'tela-inicial') {
+                barra.style.width = '14%';
+                texto.innerText = 'Passo 1 de 7: Início';
+            } else if (idTela === 'tela-escolha-opcao') {
+                barra.style.width = '28%';
+                texto.innerText = 'Passo 2 de 7: Escolha do Pix';
+            } else if (idTela === 'tela-inserir-chave') {
+                barra.style.width = '42%';
+                texto.innerText = 'Passo 3 de 7: Digitar Chave';
+            } else if (idTela === 'tela-qrcode') {
+                barra.style.width = '42%';
+                texto.innerText = 'Passo 3 de 7: QR Code';
+            }
+        }
+
+        // Redirecionamento da escolha das opções de chave (Passo 2)
+        function selecionarOpcao(tipo) {
+            if (tipo === 'digitar') {
+                document.getElementById('input-chave').value = '';
+                irParaTela('tela-inserir-chave');
+            } else if (tipo === 'qrcode') {
+                irParaTela('tela-qrcode');
+            }
+        }
+
+        // Substituição dos "Alerts" nativos do navegador por Modais mais acessíveis
+        function mostrarAlertaApp(mensagem) {
+            document.getElementById('texto-alerta-app').innerText = mensagem;
+            document.getElementById('mensagem-alerta-app').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function fecharAlertaApp() {
+            document.getElementById('mensagem-alerta-app').classList.add('hidden');
+        }
+
+        function opcaoEmDesenvolvimento(opcao) {
+            mostrarAlertaApp("A função de '" + opcao + "' será feita em outro momento. Agora vamos nos concentrar em treinar o envio do Pix!");
+        }
+
+        // Algoritmo de Validação Oficial de CPF do Brasil
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+            
+            let soma = 0;
+            let resto;
+            
+            for (let i = 1; i <= 9; i++) {
+                soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            }
+            
+            resto = (soma * 10) % 11;
+            if ((resto === 10) || (resto === 11)) resto = 0;
+            if (resto !== parseInt(cpf.substring(9, 10))) return false;
+            
+            soma = 0;
+            for (let i = 1; i <= 10; i++) {
+                soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            }
+            
+            resto = (soma * 10) % 11;
+            if ((resto === 10) || (resto === 11)) resto = 0;
+            if (resto !== parseInt(cpf.substring(10, 11))) return false;
+            
+            return true;
+        }
+
+        // Algoritmo de Validação Oficial de CNPJ do Brasil
+        function validarCNPJ(cnpj) {
+            cnpj = cnpj.replace(/[^\d]+/g, '');
+            if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+            
+            let tamanho = cnpj.length - 2;
+            let numeros = cnpj.substring(0, tamanho);
+            let digitos = cnpj.substring(tamanho);
+            let soma = 0;
+            let pos = tamanho - 7;
+            
+            for (let i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(0))) return false;
+            
+            tamanho = tamanho + 1;
+            numeros = cnpj.substring(0, tamanho);
+            soma = 0;
+            pos = daylight = tamanho - 7;
+            
+            for (let i = tamanho; i >= 1; i--) {
+                soma += numeros.charAt(tamanho - i) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            
+            resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+            if (resultado !== parseInt(digitos.charAt(1))) return false;
+            
+            return true;
+        }
+
+        // Validação de número de Telefone brasileiro (Celular ou Fixo)
+        function validarTelefone(tel) {
+            tel = tel.replace(/[^\d]+/g, '');
+            // Telefones no Brasil têm 10 dígitos (Fixo) ou 11 dígitos (Celular/Móvel) com DDD
+            if (tel.length !== 10 && tel.length !== 11) return false;
+            
+            // Verificar DDDs válidos (regra simplificada: primeiro dígito é de 1 a 9, segundo dígito também)
+            const ddd = tel.substring(0, 2);
+            if (ddd.charAt(0) === '0' || ddd.charAt(1) === '0') return false;
+            
+            // Se for celular (11 dígitos), precisa começar obrigatoriamente com o número 9
+            if (tel.length === 11) {
+                if (tel.charAt(2) !== '9') return false;
+            }
+            
+            return true;
+        }
+
+        // Aplicador de Formato visual correto após a aprovação da validação
+        function formatarChave(textoPuro, tipo) {
+            if (tipo === 'cpf') {
+                return textoPuro.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            } else if (tipo === 'cnpj') {
+                return textoPuro.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+            } else if (tipo === 'telefone') {
+                if (textoPuro.length === 11) {
+                    return textoPuro.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+                } else {
+                    return textoPuro.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+                }
+            }
+            return textoPuro;
+        }
+
+        // Processo principal de validação para o Passo 3
+        function validarEAvancar() {
+            const inputElement = document.getElementById('input-chave');
+            const valorDigitado = inputElement.value.trim();
+            
+            const divErro = document.getElementById('feedback-erro');
+            const divErroDetalhes = document.getElementById('feedback-erro-detalhes');
+            const divSucesso = document.getElementById('feedback-sucesso');
+            const containerChaveFormatada = document.getElementById('chave-formatada-exibida');
+
+            // Esconder alertas anteriores
+            divErro.classList.add('hidden');
+            divSucesso.classList.add('hidden');
+
+            if (valorDigitado === '') {
+                divErroDetalhes.innerText = "Por favor, digite os números do CPF, CNPJ ou telefone antes de continuar.";
+                divErro.classList.remove('hidden');
+                return;
+            }
+
+            // Remover qualquer pontuação inserida pelo aluno para validação pura
+            const apenasNumeros = valorDigitado.replace(/[^\d]+/g, '');
+
+            let chaveValida = false;
+            let tipoChave = '';
+
+            // Tentar descobrir qual tipo de chave corresponde ao número de caracteres digitados
+            if (apenasNumeros.length === 11) {
+                // Pode ser CPF ou Celular
+                if (validarCPF(apenasNumeros)) {
+                    chaveValida = true;
+                    tipoChave = 'cpf';
+                } else if (validarTelefone(apenasNumeros)) {
+                    chaveValida = true;
+                    tipoChave = 'telefone';
+                }
+            } else if (apenasNumeros.length === 10) {
+                // Telefone fixo
+                if (validarTelefone(apenasNumeros)) {
+                    chaveValida = true;
+                    tipoChave = 'telefone';
+                }
+            } else if (apenasNumeros.length === 14) {
+                // CNPJ
+                if (validarCNPJ(apenasNumeros)) {
+                    chaveValida = true;
+                    tipoChave = 'cnpj';
+                }
+            }
+
+            // Exibir feedbacks condicionados ao resultado da validação
+            if (chaveValida) {
+                const chaveFormatada = formatarChave(apenasNumeros, tipoChave);
+                
+                // Exibe o feedback visual de aprovação e formata o número
+                divSucesso.classList.remove('hidden');
+                containerChaveFormatada.innerText = chaveFormatada + " (" + tipoChave.toUpperCase() + ")";
+                
+                // Salva no console ou em variável se necessário
+                console.log("Chave válida e formatada:", chaveFormatada);
+
+                // Delay curto apenas para o aluno ler a mensagem de sucesso e entender que foi formatado
+                setTimeout(() => {
+                    mostrarAlertaApp("Excelente! Chave '" + chaveFormatada + "' validada com sucesso.\n\nAgora o simulador está pronto para avançarmos para o Passo 4!");
+                }, 800);
+
+            } else {
+                // Caso não tenha batido com nenhuma regra de formação brasileira válida
+                divErroDetalhes.innerText = "Verificamos os dados e os números não correspondem a um CPF, CNPJ ou número de celular/fixo real. Por favor, confira os algarismos.";
+                divErro.classList.remove('hidden');
+            }
         }
     </script>
 </body>
