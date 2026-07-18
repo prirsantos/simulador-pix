@@ -592,22 +592,22 @@
         }
 
         // Substituição dos "Alerts" nativos do navegador por Modais mais acessíveis
-        function mostrarAlertaApp(mensagem, acaoClique = null) {
-            document.getElementById('texto-alerta-app').innerText = mensaje;
-            document.getElementById('mensagem-alerta-app').classList.remove('hidden');
-            
-            const btnAlerta = document.getElementById('btn-alerta-confirmacao');
-            if (acaoClique) {
-                btnAlerta.onclick = function() {
-                    fecharAlertaApp();
-                    acaoClique();
-                };
-            } else {
-                btnAlerta.onclick = fecharAlertaApp;
-            }
-            
-            lucide.createIcons();
-        }
+       function mostrarAlertaApp(mensagem, acaoClique = null) {
+    document.getElementById('texto-alerta-app').innerText = mensaje;
+    document.getElementById('mensagem-alerta-app').classList.remove('hidden');
+    
+    const btnAlerta = document.getElementById('btn-alerta-confirmacao');
+    if (acaoClique) {
+        btnAlerta.onclick = function() {
+            fecharAlertaApp();
+            acaoClique();
+        };
+    } else {
+        btnAlerta.onclick = fecharAlertaApp;
+    }
+    
+    lucide.createIcons();
+}
 
         function fecharAlertaApp() {
             document.getElementById('mensagem-alerta-app').classList.add('hidden');
