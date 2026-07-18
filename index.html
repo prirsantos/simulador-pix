@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Ícones Lucide para navegação visual clara -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Biblioteca Html2Canvas para converter elementos HTML em imagens compartilháveis -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="bg-slate-100 font-sans min-h-screen flex flex-col justify-between items-center p-0 sm:p-4">
 
@@ -86,7 +84,7 @@
                             <tr class="hover:bg-slate-50"><td class="p-3 text-purple-600 font-bold">CNPJ</td><td class="p-3 font-mono text-slate-900 font-bold">55.444.333/0001-12</td><td class="p-3">Companhia de Luz e Energia</td><td class="p-3">Banco Metropolitano</td></tr>
                             <tr class="hover:bg-slate-50"><td class="p-3 text-purple-600 font-bold">CNPJ</td><td class="p-3 font-mono text-slate-900 font-bold">22.333.444/0001-50</td><td class="p-3">Farmácia Vida Longa Ltda.</td><td class="p-3">Banco Comercial</td></tr>
                             <tr class="hover:bg-slate-50"><td class="p-3 text-purple-600 font-bold">CNPJ</td><td class="p-3 font-mono text-slate-900 font-bold">88.777.666/0001-09</td><td class="p-3">Oficina Mecânica Aliança</td><td class="p-3">Poupe Banco</td></tr>
-                            <!-- E-mails (Atualizados conforme versão diversificada) -->
+                            <!-- E-mails Diversificados -->
                             <tr class="hover:bg-slate-50"><td class="p-3 text-amber-600 font-bold">E-mail</td><td class="p-3 font-mono text-slate-900 font-bold">joaosouza26@email.com</td><td class="p-3">João Pedro Souza</td><td class="p-3">Cooperativa Crédito</td></tr>
                             <tr class="hover:bg-slate-50"><td class="p-3 text-amber-600 font-bold">E-mail</td><td class="p-3 font-mono text-slate-900 font-bold">analucia_oliveira@email.com</td><td class="p-3">Ana Lúcia de Oliveira</td><td class="p-3">Banco da Economia</td></tr>
                             <tr class="hover:bg-slate-50"><td class="p-3 text-amber-600 font-bold">E-mail</td><td class="p-3 font-mono text-slate-900 font-bold">tetecristina@email.com</td><td class="p-3">Tereza Cristina Barbosa</td><td class="p-3">Banco do Povo</td></tr>
@@ -475,7 +473,8 @@
                     <button onclick="reiniciarSimulador()" class="w-full bg-[#002060] text-white font-black py-4 rounded-xl text-xl shadow-md flex items-center justify-center gap-2">
                         Fazer Novo Pix / Recomeçar<i data-lucide="rotate-ccw" class="w-5 h-5"></i>
                     </button>
-                    <button onclick="compartilharWhatsApp()" class="w-full border-2 border-[#009b3a] text-[#009b3a] font-black py-3 rounded-xl flex items-center justify-center gap-2 text-base">
+                    <!-- Alterado para direcionar para o aviso simulado em desenvolvimento -->
+                    <button onclick="opcaoEmDesenvolvimento('Compartilhamento de Comprovante')" class="w-full border-2 border-[#009b3a] text-[#009b3a] font-black py-3 rounded-xl flex items-center justify-center gap-2 text-base">
                         <i data-lucide="share-2" class="w-5 h-5"></i>Compartilhar Comprovante
                     </button>
                 </div>
@@ -551,7 +550,6 @@
             "55444333000112": { nome: "Companhia de Luz e Energia", banco: "BANCO METROPOLITANO" },
             "22333444000150": { nome: "Farmácia Vida Longa Ltda.", banco: "BANCO COMERCIAL" },
             "88777666000109": { nome: "Oficina Mecânica Aliança", banco: "POUPE BANCO" },
-            // Versão diversificada antes do @
             "joaosouza26@email.com": { nome: "João Pedro Souza", banco: "COOPERATIVA CRÉDITO" },
             "analucia_oliveira@email.com": { nome: "Ana Lúcia de Oliveira", banco: "BANCO DA ECONOMIA" },
             "tetecristina@email.com": { nome: "Tereza Cristina Barbosa", banco: "BANCO DO POVO" },
@@ -676,15 +674,15 @@
             return textoPuro;
         }
 
-        // ================= REVISÃO COMPLETA DA FORMATAÇÃO EM TEMPO REAL =================
         function processarFormatacaoEmTempoReal() {
             const inputVal = document.getElementById('input-chave').value.trim();
-            const dBox = document.getElementById('feedback-dinamico');
+            const dBox = document.getElementById('feedback-dynamico');
+            const dBoxEl = document.getElementById('feedback-dinamico');
             const dTxt = document.getElementById('feedback-dinamico-texto');
             document.getElementById('feedback-erro').classList.add('hidden');
 
             if (inputVal === '') {
-                dBox.className = "bg-slate-50 border-2 border-dashed border-slate-300 p-4 rounded-2xl min-h-[70px] flex items-center justify-center text-center";
+                dBoxEl.className = "bg-slate-50 border-2 border-dashed border-slate-300 p-4 rounded-2xl min-h-[70px] flex items-center justify-center text-center";
                 dTxt.innerHTML = "Comece a digitar e o sistema mostrará a identificação aqui...";
                 return;
             }
@@ -692,7 +690,7 @@
             if (inputVal.includes('@')) {
                 const partes = inputVal.split('@');
                 if (partes.length === 2 && partes[1].includes('.')) {
-                    dBox.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
+                    dBoxEl.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
                     dTxt.innerHTML = `<span class="text-[#009b3a] font-black uppercase text-xs block">Formato Reconhecido!</span> <strong class="text-lg text-slate-800 font-extrabold block mt-0.5">${inputVal} (E-MAIL)</strong>`;
                     return;
                 }
@@ -700,32 +698,31 @@
 
             const apenasNumeros = inputVal.replace(/[^\d]+/g, '');
 
-            // Validações completas vêm antes para evitar que CPFs incompletos caiam em formato fixo por engano
             if (apenasNumeros.length === 11 && validarCPF(apenasNumeros)) {
-                dBox.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
+                dBoxEl.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
                 dTxt.innerHTML = `<span class="text-[#009b3a] font-black uppercase text-xs block">Formato Reconhecido!</span> <strong class="text-lg text-slate-800 font-extrabold block mt-0.5">${formatarChave(apenasNumeros, 'cpf')} (CPF)</strong>`;
                 return;
             } 
             
             if (apenasNumeros.length === 11 && validarTelefone(apenasNumeros)) {
-                dBox.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
+                dBoxEl.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
                 dTxt.innerHTML = `<span class="text-[#009b3a] font-black uppercase text-xs block">Formato Reconhecido!</span> <strong class="text-lg text-slate-800 font-extrabold block mt-0.5">${formatarChave(apenasNumeros, 'telefone')} (CELULAR)</strong>`;
                 return;
             }
 
             if (apenasNumeros.length === 14 && validarCNPJ(apenasNumeros)) {
-                dBox.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
+                dBoxEl.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
                 dTxt.innerHTML = `<span class="text-[#009b3a] font-black uppercase text-xs block">Formato Reconhecido!</span> <strong class="text-lg text-slate-800 font-extrabold block mt-0.5">${formatarChave(apenasNumeros, 'cnpj')} (CNPJ)</strong>`;
                 return;
             }
 
             if (apenasNumeros.length === 10 && validarTelefone(apenasNumeros)) {
-                dBox.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
+                dBoxEl.className = "bg-green-50 border-2 border-[#009b3a] p-4 rounded-2xl min-h-[70px] flex flex-col items-center justify-center text-center";
                 dTxt.innerHTML = `<span class="text-[#009b3a] font-black uppercase text-xs block">Formato Reconhecido!</span> <strong class="text-lg text-slate-800 font-extrabold block mt-0.5">${formatarChave(apenasNumeros, 'telefone')} (FIXO)</strong>`;
                 return;
             }
 
-            dBox.className = "bg-amber-50 border-2 border-[#fedf00] p-4 rounded-2xl min-h-[70px] flex items-center justify-center text-center";
+            dBoxEl.className = "bg-amber-50 border-2 border-[#fedf00] p-4 rounded-2xl min-h-[70px] flex items-center justify-center text-center";
             dTxt.innerHTML = `<span class="text-slate-700 font-semibold text-sm">Identificando o formato enquanto você escreve...</span>`;
         }
 
@@ -890,30 +887,6 @@
             document.getElementById('input-senha-treino').value = '';
             atualizarDisplayValor();
             irParaTela('tela-inicial');
-        }
-
-        async function compartilharWhatsApp() {
-            const elementoComprovante = document.getElementById('quadro-comprovante');
-            if (!elementoComprovante) { alert("Erro ao localizar bloco do comprovante."); return; }
-            try {
-                const canvas = await html2canvas(elementoComprovante, { scale: 2, backgroundColor: "#ffffff" });
-                canvas.toBlob(async (blob) => {
-                    if (!blob) { alert("Erro de conversão gráfica."); return; }
-                    const arquivoComprovante = new File([blob], 'comprovante-pix-treino.png', { type: 'image/png' });
-                    if (navigator.canShare && navigator.canShare({ files: [arquivoComprovante] })) {
-                        await navigator.share({
-                            files: [arquivoComprovante],
-                            title: 'Comprovante PIX (Treino)',
-                            text: 'Simulação concluída com sucesso!'
-                        });
-                    } else {
-                        mostrarAlertaApp("O sistema de partilha nativa falhou. Certifique-se de testar em ambiente HTTPS seguro.");
-                    }
-                }, 'image/png');
-            } catch (erro) {
-                console.error(erro);
-                alert("Erro ao tentar empacotar o comprovante.");
-            }
         }
     </script>
 </body>
