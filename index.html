@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Ícones Lucide para navegação visual clara -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Biblioteca Html2Canvas para converter elementos HTML em imagens compartilháveis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="bg-slate-100 font-sans flex justify-center items-start min-h-screen sm:items-center">
 
@@ -254,7 +256,7 @@
                         <i data-lucide="shield-alert" class="w-6 h-6 text-red-600 shrink-0 mt-0.5"></i>
                         <div>
                             <p class="font-black text-red-700 text-base">Muito Importante:</p>
-                            <p class="text-sm text-slate-800 mt-1">Se o nome acima não for o de quem você quer enviar o dinheiro, <strong>not continue</strong> de jeito nenhum!</p>
+                            <p class="text-sm text-slate-800 mt-1">Se o nome acima não for o de quem você quer enviar o dinheiro, <strong>não continue</strong> de jeito nenhum!</p>
                         </div>
                     </div>
                 </div>
@@ -306,10 +308,6 @@
                     <button onclick="tecladoDigitar('4')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">4</button>
                     <button onclick="tecladoDigitar('5')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">5</button>
                     <button onclick="tecladoDigitar('6')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">6</button>
-                    
-                    <button onclick="tecladoDigitar('7')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">7</button>
-                    <button onclick="tecladoDigitar('8')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">8</button>
-                    <button onclick="tecladoDigitar('9')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">9</button>
                     
                     <button onclick="tecladoLimparTudo()" class="bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 font-bold text-sm py-3 rounded-xl flex items-center justify-center shadow-sm">LIMPAR</button>
                     <button onclick="tecladoDigitar('0')" class="bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#002060] font-black text-2xl py-3 rounded-xl shadow-sm">0</button>
@@ -403,8 +401,8 @@
                     <p class="text-sm text-slate-500 font-bold uppercase tracking-wide">Transação Simulada Concluída</p>
                 </div>
 
-                <!-- O Comprovante Visual de Papel -->
-                <div class="bg-white border-2 border-slate-300 rounded-2xl p-5 shadow-md relative overflow-hidden flex flex-col gap-3.5">
+                <!-- O Comprovante Visual de Papel (id adicionado para captura do print) -->
+                <div id="quadro-comprovante" class="bg-white border-2 border-slate-300 rounded-2xl p-5 shadow-md relative overflow-hidden flex flex-col gap-3.5">
                     
                     <!-- Faixa de Marca D'água Educativa do Comprovante -->
                     <div class="absolute -right-16 -top-2 bg-[#fedf00] text-red-600 text-[9px] font-black py-1 w-60 text-center rotate-45 border border-red-500 shadow">
@@ -552,28 +550,28 @@
 
             if (idTela === 'tela-inicial') {
                 barra.style.width = '14%';
-                text.innerText = 'Passo 1 de 7: Início';
+                texto.innerText = 'Passo 1 de 7: Início';
             } else if (idTela === 'tela-escolha-opcao') {
                 barra.style.width = '28%';
-                text.innerText = 'Passo 2 de 7: Escolha do Pix';
+                texto.innerText = 'Passo 2 de 7: Escolha do Pix';
             } else if (idTela === 'tela-inserir-chave') {
                 barra.style.width = '42%';
-                text.innerText = 'Passo 3 de 7: Digitar Chave';
+                texto.innerText = 'Passo 3 de 7: Digitar Chave';
             } else if (idTela === 'tela-confirmar-destinatario') {
                 barra.style.width = '56%';
-                text.innerText = 'Passo 4 de 7: Confirmar Dados';
+                texto.innerText = 'Passo 4 de 7: Confirmar Dados';
             } else if (idTela === 'tela-valor-transferencia') {
                 barra.style.width = '70%';
-                text.innerText = 'Passo 5 de 7: Valor do Pix';
+                texto.innerText = 'Passo 5 de 7: Valor do Pix';
             } else if (idTela === 'tela-revisao-confirmacao') {
                 barra.style.width = '85%';
-                text.innerText = 'Passo 6 de 7: Revisão e Senha';
+                texto.innerText = 'Passo 6 de 7: Revisão e Senha';
             } else if (idTela === 'tela-comprovante-sucesso') {
                 barra.style.width = '100%';
-                text.innerText = 'Passo 7 de 7: Comprovante';
+                texto.innerText = 'Passo 7 de 7: Comprovante';
             } else if (idTela === 'tela-qrcode') {
                 barra.style.width = '42%';
-                text.innerText = 'Passo 3 de 7: QR Code';
+                texto.innerText = 'Passo 3 de 7: QR Code';
             }
         }
 
@@ -592,22 +590,23 @@
         }
 
         // Substituição dos "Alerts" nativos do navegador por Modais mais acessíveis
-       function mostrarAlertaApp(mensagem, acaoClique = null) {
-    document.getElementById('texto-alerta-app').innerText = mensaje;
-    document.getElementById('mensagem-alerta-app').classList.remove('hidden');
-    
-    const btnAlerta = document.getElementById('btn-alerta-confirmacao');
-    if (acaoClique) {
-        btnAlerta.onclick = function() {
-            fecharAlertaApp();
-            acaoClique();
-        };
-    } else {
-        btnAlerta.onclick = fecharAlertaApp;
-    }
-    
-    lucide.createIcons();
-}
+        // Correção de 'mensaje' para 'mensagem' aplicada aqui
+        function mostrarAlertaApp(mensagem, acaoClique = null) {
+            document.getElementById('texto-alerta-app').innerText = mensagem;
+            document.getElementById('mensagem-alerta-app').classList.remove('hidden');
+            
+            const btnAlerta = document.getElementById('btn-alerta-confirmacao');
+            if (acaoClique) {
+                btnAlerta.onclick = function() {
+                    fecharAlertaApp();
+                    acaoClique();
+                };
+            } else {
+                btnAlerta.onclick = fecharAlertaApp;
+            }
+            
+            lucide.createIcons();
+        }
 
         function fecharAlertaApp() {
             document.getElementById('mensagem-alerta-app').classList.add('hidden');
@@ -942,7 +941,7 @@
                 gerarDadosComprovante();
                 irParaTela('tela-comprovante-sucesso');
             } else {
-                // Alerta acessível do simulador para feedback pedagógico de erro
+                // Modal corrigido e integrado para tratar erro de digitação de senha
                 mostrarAlertaApp("A senha de treino para todos nesta simulação é 2016. Tente novamente com calma.", function() {
                     campoSenha.value = '';
                     validarDigitoSenha();
@@ -973,33 +972,55 @@
             document.getElementById('input-chave').value = '';
             document.getElementById('input-senha-treino').value = '';
             
-            // Corrige o problema 3 zerando visualmente a Tela 5 antes de recomeçar
+            // Zerando visualmente a Tela 5 antes de recomeçar
             atualizarDisplayValor();
             
             // Redireciona para o Dashboard principal
             irParaTela('tela-inicial');
         }
 
-        // Nova funcionalidade para integração com WhatsApp
-        function compartilharWhatsApp() {
-            const valor = document.getElementById('comprovante-valor').innerText;
-            const chave = document.getElementById('comprovante-chave').innerText;
-            const dataHora = document.getElementById('comprovante-data-hora').innerText;
-            const idTransacao = document.getElementById('comprovante-codigo-id').innerText;
+        // Nova funcionalidade assíncrona para compartilhamento de imagem via Web Share API
+        async function compartilharWhatsApp() {
+            const elementoComprovante = document.getElementById('quadro-comprovante');
+            
+            if (!elementoComprovante) {
+                alert("Erro: Bloco de dados do comprovante não localizado.");
+                return;
+            }
 
-            const textoMensagem = 
-`*NOSSO BANCO - COMPROVANTE PIX (TREINO)*
-🏁 *Situação:* Enviado com Sucesso
-💸 *Valor:* ${valor}
-👤 *Para:* MARIA SOUZA OLIVEIRA
-🔑 *Chave Pix:* ${chave}
-📅 *Data/Hora:* ${dataHora}
-🆔 *Código:* \`${idTransacao}\`
+            try {
+                // Converte a área do comprovante em canvas
+                const canvas = await html2canvas(elementoComprovante, {
+                    scale: 2, 
+                    backgroundColor: "#ffffff"
+                });
 
-_Simulador Escolar Seguro - Sem valor real_`;
+                // Converte o canvas para blob binário
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        alert("Erro técnico ao tentar processar o arquivo de imagem.");
+                        return;
+                    }
 
-            const linkWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(textoMensagem);
-            window.open(linkWhatsApp, '_blank');
+                    // Monta o arquivo PNG para transferência
+                    const arquivoComprovante = new File([blob], 'comprovante-pix-treino.png', { type: 'image/png' });
+
+                    // Dispara a partilha nativa do smartphone
+                    if (navigator.canShare && navigator.canShare({ files: [arquivoComprovante] })) {
+                        await navigator.share({
+                            files: [arquivoComprovante],
+                            title: 'Comprovante PIX - Nosso Banco (Treino)',
+                            text: 'Treino de transferência Pix concluído com sucesso.'
+                        });
+                    } else {
+                        mostrarAlertaApp("Seu dispositivo não suporta o envio de imagens. Certifique-se de que a página está rodando em uma conexão segura HTTPS.");
+                    }
+                }, 'image/png');
+
+            } catch (erro) {
+                console.error("Falha ao compartilhar imagem:", erro);
+                alert("Não foi possível gerar a imagem para compartilhamento.");
+            }
         }
     </script>
 </body>
