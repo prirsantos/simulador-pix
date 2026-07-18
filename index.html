@@ -254,7 +254,7 @@
                         <i data-lucide="shield-alert" class="w-6 h-6 text-red-600 shrink-0 mt-0.5"></i>
                         <div>
                             <p class="font-black text-red-700 text-base">Muito Importante:</p>
-                            <p class="text-sm text-slate-800 mt-1">Se o nome acima não for o de quem você quer enviar o dinheiro, <strong>não continue</strong> de jeito nenhum!</p>
+                            <p class="text-sm text-slate-800 mt-1">Se o nome acima não for o de quem você quer enviar o dinheiro, <strong>not continue</strong> de jeito nenhum!</p>
                         </div>
                     </div>
                 </div>
@@ -335,7 +335,7 @@
 
             </div>
 
-            <!-- ================= TELA 6: REVISÃO E CONFIRMAÇÃO COM SENHA (NOVA) ================= -->
+            <!-- ================= TELA 6: REVISÃO E CONFIRMAÇÃO COM SENHA ================= -->
             <div id="tela-revisao-confirmacao" class="tela-app hidden flex flex-col gap-5 justify-between flex-1">
                 
                 <div class="flex flex-col gap-2">
@@ -366,23 +366,13 @@
                     </div>
                 </div>
 
-                <!-- Inserção de Senha Segura (Bolinhas e Teclado Numérico Nativo do Celular) -->
+                <!-- Inserção de Senha Numérica Customizada para Mobile -->
                 <div class="flex flex-col gap-2">
                     <label for="input-senha-treino" class="text-sm font-black uppercase text-[#002060] tracking-wider">Digite sua Senha de Treino (4 dígitos):</label>
-                    <input type="password" id="input-senha-treino" maxlength="4" inputmode="numeric" pattern="[0-9]*" oninput="validarDigitoSenha()"
+                    <input type="text" id="input-senha-treino" maxlength="4" inputmode="numeric" pattern="[0-9]*" oninput="validarDigitoSenha()"
                            class="w-full border-4 border-[#002060] rounded-2xl p-4 text-center text-3xl font-black tracking-[1em] text-[#002060] focus:outline-none focus:ring-4 focus:ring-yellow-300"
+                           style="-webkit-text-security: disc; text-security: disc;"
                            placeholder="••••">
-                    
-                    <!-- Mensagem Pedagógica / Erro de Senha -->
-                    <div id="feedback-senha-erro" class="hidden bg-red-50 border-l-4 border-red-600 p-4 rounded-r-xl mt-1">
-                        <p class="text-red-700 font-black text-base flex items-center gap-1.5">
-                            <i data-lucide="alert-triangle" class="w-4.5 h-4.5 shrink-0"></i>
-                            Senha incorreta!
-                        </p>
-                        <p class="text-sm text-red-600 mt-1 font-medium leading-normal">
-                            A senha de treino para todos nesta simulação é <strong>2016</strong>. Apague os números e digite novamente com calma.
-                        </p>
-                    </div>
                 </div>
 
                 <!-- Botões de Envio de Dinheiro -->
@@ -465,7 +455,7 @@
                         <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
                     </button>
                     
-                    <button onclick="opcaoEmDesenvolvimento('Compartilhamento de Comprovante')" 
+                    <button onclick="compartilharWhatsApp()" 
                             class="w-full border-2 border-[#009b3a] text-[#009b3a] hover:bg-green-50 font-black py-3 rounded-xl flex items-center justify-center gap-2 text-base">
                         <i data-lucide="share-2" class="w-5 h-5"></i>
                         Compartilhar Comprovante
@@ -551,7 +541,6 @@
             
             // Ocultar avisos da tela anterior ao mudar de tela
             document.getElementById('feedback-erro').classList.add('hidden');
-            document.getElementById('feedback-senha-erro').classList.add('hidden');
             
             atualizarProgresso(idTela);
         }
@@ -563,28 +552,28 @@
 
             if (idTela === 'tela-inicial') {
                 barra.style.width = '14%';
-                texto.innerText = 'Passo 1 de 7: Início';
+                text.innerText = 'Passo 1 de 7: Início';
             } else if (idTela === 'tela-escolha-opcao') {
                 barra.style.width = '28%';
-                texto.innerText = 'Passo 2 de 7: Escolha do Pix';
+                text.innerText = 'Passo 2 de 7: Escolha do Pix';
             } else if (idTela === 'tela-inserir-chave') {
                 barra.style.width = '42%';
-                texto.innerText = 'Passo 3 de 7: Digitar Chave';
+                text.innerText = 'Passo 3 de 7: Digitar Chave';
             } else if (idTela === 'tela-confirmar-destinatario') {
                 barra.style.width = '56%';
-                texto.innerText = 'Passo 4 de 7: Confirmar Dados';
+                text.innerText = 'Passo 4 de 7: Confirmar Dados';
             } else if (idTela === 'tela-valor-transferencia') {
                 barra.style.width = '70%';
-                texto.innerText = 'Passo 5 de 7: Valor do Pix';
+                text.innerText = 'Passo 5 de 7: Valor do Pix';
             } else if (idTela === 'tela-revisao-confirmacao') {
                 barra.style.width = '85%';
-                texto.innerText = 'Passo 6 de 7: Revisão e Senha';
+                text.innerText = 'Passo 6 de 7: Revisão e Senha';
             } else if (idTela === 'tela-comprovante-sucesso') {
                 barra.style.width = '100%';
-                texto.innerText = 'Passo 7 de 7: Comprovante';
+                text.innerText = 'Passo 7 de 7: Comprovante';
             } else if (idTela === 'tela-qrcode') {
                 barra.style.width = '42%';
-                texto.innerText = 'Passo 3 de 7: QR Code';
+                text.innerText = 'Passo 3 de 7: QR Code';
             }
         }
 
@@ -604,7 +593,7 @@
 
         // Substituição dos "Alerts" nativos do navegador por Modais mais acessíveis
         function mostrarAlertaApp(mensagem, acaoClique = null) {
-            document.getElementById('texto-alerta-app').innerText = mensagem;
+            document.getElementById('texto-alerta-app').innerText = mensaje;
             document.getElementById('mensagem-alerta-app').classList.remove('hidden');
             
             const btnAlerta = document.getElementById('btn-alerta-confirmacao');
@@ -936,9 +925,6 @@
         function validarDigitoSenha() {
             const campoSenha = document.getElementById('input-senha-treino');
             const btnEnviar = document.getElementById('btn-enviar-pix-final');
-            
-            // Ocultar mensagem de erro anterior quando começar a escrever
-            document.getElementById('feedback-senha-erro').classList.add('hidden');
 
             if (campoSenha.value.length === 4) {
                 btnEnviar.disabled = false;
@@ -951,17 +937,17 @@
 
         function processarEnvioComSenha() {
             const campoSenha = document.getElementById('input-senha-treino');
-            const divErroSenha = document.getElementById('feedback-senha-erro');
 
             if (campoSenha.value === '2016') {
-                // Senha Correta -> Prepara o Comprovante (Passo 7)
                 gerarDadosComprovante();
                 irParaTela('tela-comprovante-sucesso');
             } else {
-                // Senha Errada -> Mostra tela/mensagem de erro e desabilita botão
-                divErroSenha.classList.remove('hidden');
-                campoSenha.value = '';
-                validarDigitoSenha();
+                // Alerta acessível do simulador para feedback pedagógico de erro
+                mostrarAlertaApp("A senha de treino para todos nesta simulação é 2016. Tente novamente com calma.", function() {
+                    campoSenha.value = '';
+                    validarDigitoSenha();
+                    campoSenha.focus();
+                });
             }
         }
 
@@ -987,8 +973,33 @@
             document.getElementById('input-chave').value = '';
             document.getElementById('input-senha-treino').value = '';
             
+            // Corrige o problema 3 zerando visualmente a Tela 5 antes de recomeçar
+            atualizarDisplayValor();
+            
             // Redireciona para o Dashboard principal
             irParaTela('tela-inicial');
+        }
+
+        // Nova funcionalidade para integração com WhatsApp
+        function compartilharWhatsApp() {
+            const valor = document.getElementById('comprovante-valor').innerText;
+            const chave = document.getElementById('comprovante-chave').innerText;
+            const dataHora = document.getElementById('comprovante-data-hora').innerText;
+            const idTransacao = document.getElementById('comprovante-codigo-id').innerText;
+
+            const textoMensagem = 
+`*NOSSO BANCO - COMPROVANTE PIX (TREINO)*
+🏁 *Situação:* Enviado com Sucesso
+💸 *Valor:* ${valor}
+👤 *Para:* MARIA SOUZA OLIVEIRA
+🔑 *Chave Pix:* ${chave}
+📅 *Data/Hora:* ${dataHora}
+🆔 *Código:* \`${idTransacao}\`
+
+_Simulador Escolar Seguro - Sem valor real_`;
+
+            const linkWhatsApp = "https://api.whatsapp.com/send?text=" + encodeURIComponent(textoMensagem);
+            window.open(linkWhatsApp, '_blank');
         }
     </script>
 </body>
